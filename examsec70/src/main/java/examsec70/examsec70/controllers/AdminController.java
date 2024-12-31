@@ -39,7 +39,7 @@ public class AdminController {
     @PostMapping(value = "album/crear", produces = "application/json")
     public ResponseEntity<Object> createAlbum(@RequestBody Album album) {
 
-        if (album.getAlbNombre().equals("") || album.getAlbNombre() == null) {
+        if (album.getAlbNombre().isEmpty() || album.getAlbNombre() == null) {
             throw new RuntimeException("El nombre del Álbum es requerido");
         }
         albumService.crear(album);
@@ -75,7 +75,7 @@ public class AdminController {
         album = albumService.buscar(id);
         album.setAlbNombre(albumRequest.getAlbNombre());
         album.setAlbDescripcion(albumRequest.getAlbDescripcion());
-        album.setCant_laminas(albumRequest.getCant_laminas());
+        album.setCantLaminas(albumRequest.getCantLaminas());
         albumService.crear(album);
 
         albumResponse.setStatus(200);

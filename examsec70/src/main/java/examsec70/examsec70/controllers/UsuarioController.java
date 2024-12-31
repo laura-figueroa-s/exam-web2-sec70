@@ -29,7 +29,7 @@ public class UsuarioController {
     private UsuarioLaminaService usuarioLaminaService;
 
     // Añadir Album - Post
-    @PostMapping(value = "album/añadir", produces = "application/json")
+    @PostMapping(value = "album/add", produces = "application/json")
     public ResponseEntity<Object> createAlbum(@RequestBody UsuarioAlbum usuarioAlbum) {
 
         if (usuarioAlbum.getUsuAlbAlbum() == null) {
@@ -73,7 +73,7 @@ public class UsuarioController {
     }
 
     // Añadir Lámina - Post
-    @PostMapping(value = "lámina/añadir", produces = "application/json")
+    @PostMapping(value = "lamina/add", produces = "application/json")
     public ResponseEntity<Object> createLamina(@RequestBody UsuarioLamina usuarioLamina) {
 
         if (usuarioLamina.getUsuLamLamina() == null) {
