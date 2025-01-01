@@ -24,8 +24,13 @@ public class UsuarioLaminaService {
     }
 
     // buscar
-    public UsuarioLamina buscar(long usuLam) {
-        return usuarioLaminaRepository.findById(usuLam).orElse(null);
+    public UsuarioLamina buscar(long id) {
+        return usuarioLaminaRepository.findById(id).orElse(null);
+    }
+
+    // buscar si se siente alguna lamina
+    public List<UsuarioLamina> buscarMayordeCero(long id) {
+        return usuarioLaminaRepository.findByCantidadGreaterThanAndUsuLamId(0,id);
     }
 
     // buscar repetidos por usuario

@@ -28,7 +28,7 @@ public class UsuarioController {
     @Autowired
     private UsuarioLaminaService usuarioLaminaService;
 
-    // Añadir Album - Post
+    // Añadir Usuario-Album - Post
     @PostMapping(value = "album/add", produces = "application/json")
     public ResponseEntity<Object> createAlbum(@RequestBody UsuarioAlbum usuarioAlbum) {
 
@@ -48,7 +48,7 @@ public class UsuarioController {
 
     }
 
-    // Listar Albumes Propios - Get
+    // Listar Usuario-Albumes Propios del Usuario - Get
     @GetMapping(value = "album/listar/{id}", produces = "application/json")
     public ResponseEntity<Object> getAlbum(@PathVariable long id) {
         UsuarioAlbumResponse usuarioAlbumResponse = new UsuarioAlbumResponse();
@@ -60,7 +60,24 @@ public class UsuarioController {
                 .body(usuarioAlbumResponse);
     }
 
-    // Eliminar Álbum por Id - Delete
+    // Actualizar Usuario-Álbum por Id - Put
+    @PutMapping(value = "album/actualizar/{id}", produces = "application/json")
+    public ResponseEntity<Object> setAlbum(@PathVariable long id, @RequestBody UsuarioAlbum usuarioAlbumRequest) {
+        UsuarioAlbumResponse usuarioAlbumResponse = new UsuarioAlbumResponse();
+        UsuarioAlbum usuarioAlbum = new UsuarioAlbum();
+        usuarioAlbum = usuarioAlbumService.buscar(id);
+        usuarioAlbum.setUsuAlbAlbum(usuarioAlbumRequest.getUsuAlbAlbum());
+        usuarioAlbum.setUsuAlbUsuario(usuarioAlbumRequest.getUsuAlbUsuario());
+        usuarioAlbumService.crear(usuarioAlbum);
+
+        usuarioAlbumResponse.setStatus(200);
+        usuarioAlbumResponse.setMessage("Álbum actualizado exitosamente");
+        usuarioAlbumResponse.setUsuarioAlbum(usuarioAlbum);
+        return ResponseEntity.ok()
+                .body(usuarioAlbumResponse);
+    }
+
+    // Eliminar Usuario-Álbum por Id - Delete
     @DeleteMapping(value = "album/eliminar/{id}", produces = "application/json")
     public ResponseEntity<Object> deleteAlbum(@PathVariable long id) {
         UsuarioAlbumResponse usuarioAlbumResponse = new UsuarioAlbumResponse();
@@ -72,7 +89,7 @@ public class UsuarioController {
 
     }
 
-    // Añadir Lámina - Post
+    // Añadir Usuario-Lámina - Post
     @PostMapping(value = "lamina/add", produces = "application/json")
     public ResponseEntity<Object> createLamina(@RequestBody UsuarioLamina usuarioLamina) {
 
@@ -92,19 +109,19 @@ public class UsuarioController {
 
     }
 
-    // Listar Láminas Propias - Get
+    // Listar Usuario-Láminas Propias del Usuario - Get
     @GetMapping(value = "lamina/listar/{id}", produces = "application/json")
     public ResponseEntity<Object> getLamina(@PathVariable long id) {
-        UsuarioLaminaResponse usuarioLaminaResponse = new UsuarioLaminaResponse();
-        usuarioLaminaResponse.setStatus(200);
-        usuarioLaminaResponse.setMessage("Láminas listadas correctamente");
-        usuarioLaminaResponse.setUsuarioLamina(usuarioLaminaService.buscar(id));
+        UsuarioLaminasResponse usuarioLaminasResponse = new UsuarioLaminasResponse();
+        usuarioLaminasResponse.setStatus(200);
+        usuarioLaminasResponse.setMessage("Láminas listadas correctamente");
+        usuarioLaminasResponse.setUsuarioLaminas(usuarioLaminaService.buscarMayordeCero(id));
 
         return ResponseEntity.ok()
-                .body(usuarioLaminaResponse);
+                .body(usuarioLaminasResponse);
     }
 
-    // Listar Láminas Repetidas - Get
+    // Listar Usuario-Láminas Repetidas - Get
     @GetMapping(value = "lamina/listar/{id}/repetidas", produces = "application/json")
     public ResponseEntity<Object> getLaminaRepetida(@PathVariable long id) {
         UsuarioLaminasResponse usuarioLaminasResponse = new UsuarioLaminasResponse();
@@ -116,7 +133,7 @@ public class UsuarioController {
                 .body(usuarioLaminasResponse);
     }
 
-    // Listar Láminas Faltantes - Get
+    // Listar Usuario-Láminas Faltantes - Get
     @GetMapping(value = "lamina/listar/{id}/faltantes", produces = "application/json")
     public ResponseEntity<Object> getLaminaFaltante(@PathVariable long id) {
         UsuarioLaminasResponse usuarioLaminasResponse = new UsuarioLaminasResponse();
@@ -128,7 +145,7 @@ public class UsuarioController {
                 .body(usuarioLaminasResponse);
     }
 
-    // Actualizar Lámina por Id - Put
+    // Actualizar Usuario-Lámina por Id - Put
     @PutMapping(value = "lamina/actualizar/{id}", produces = "application/json")
     public ResponseEntity<Object> setLamina(@PathVariable long id, @RequestBody UsuarioLamina usuarioLaminaRequest) {
         UsuarioLaminaResponse usuarioLaminaResponse = new UsuarioLaminaResponse();
@@ -148,7 +165,7 @@ public class UsuarioController {
                 .body(usuarioLaminaResponse);
     }
 
-    // Eliminar Práctica por Id - Delete
+    // Eliminar Usuario-Lámina por Id - Delete
     @DeleteMapping(value = "lamina/eliminar/{id}", produces = "application/json")
     public ResponseEntity<Object> deleteLamina(@PathVariable long id) {
         UsuarioLaminaResponse usuarioLaminaResponse = new UsuarioLaminaResponse();

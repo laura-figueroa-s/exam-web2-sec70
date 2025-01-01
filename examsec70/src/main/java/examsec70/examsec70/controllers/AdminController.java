@@ -13,17 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import examsec70.examsec70.models.Album;
 import examsec70.examsec70.models.Lamina;
-import examsec70.examsec70.models.Usuario;
 import examsec70.examsec70.responses.AlbumResponse;
 import examsec70.examsec70.responses.AlbumsResponse;
 import examsec70.examsec70.responses.LaminaResponse;
 import examsec70.examsec70.responses.LaminasResponse;
-import examsec70.examsec70.responses.UsuarioResponse;
-import examsec70.examsec70.responses.UsuariosResponse;
 
 import examsec70.examsec70.services.AlbumService;
 import examsec70.examsec70.services.LaminaService;
-import examsec70.examsec70.services.UsuarioService;
 
 @Controller
 @RequestMapping("api/admin")
@@ -32,8 +28,6 @@ public class AdminController {
     AlbumService albumService;
     @Autowired
     LaminaService laminaService;
-    @Autowired
-    UsuarioService usuarioService;
 
     // Crear Álbum - Post
     @PostMapping(value = "album/crear", produces = "application/json")
@@ -101,7 +95,7 @@ public class AdminController {
     @PostMapping(value = "lamina/crear", produces = "application/json")
     public ResponseEntity<Object> createLamina(@RequestBody Lamina lamina) {
 
-        if (lamina.getLamAlbum().equals("") || lamina.getLamAlbum() == null) {
+        if (lamina.getLamAlbum() == null) {
             throw new RuntimeException("Indicar un Álbum es requerido");
         }
         laminaService.crear(lamina);
@@ -148,75 +142,13 @@ public class AdminController {
     // Eliminar Lámina por Id - Delete
     @DeleteMapping(value = "lamina/eliminar/{id}", produces = "application/json")
     public ResponseEntity<Object> deleteLamina(@PathVariable long id) {
-        AlbumResponse albumResponse = new AlbumResponse();
-        albumService.eliminar(id);
-        albumResponse.setStatus(200);
-        albumResponse.setMessage("Lámina eliminada exitosamente");
+        LaminaResponse laminaResponse = new LaminaResponse();
+        laminaService.eliminar(id);
+        laminaResponse.setStatus(200);
+        laminaResponse.setMessage("Lámina eliminada exitosamente");
         return ResponseEntity.ok()
-                .body(albumResponse);
+                .body(laminaResponse);
 
     }
-
-    // Crear Usuario - Post
-    @PostMapping(value = "usuario/crear", produces = "application/json")
-    public ResponseEntity<Object> createUsuario(@RequestBody Usuario usuario) {
-
-        if (usuario.getUsuNombreCompleto().equals("") || usuario.getUsuNombreCompleto() == null) {
-            throw new RuntimeException("El nombre del Usuario es requerido");
-        }
-        usuarioService.crear(usuario);
-
-        // Estructura de Respuesta
-        UsuarioResponse usuarioResponse = new UsuarioResponse();
-        usuarioResponse.setStatus(200);
-        usuarioResponse.setMessage("Usuario creado correctamente");
-        usuarioResponse.setUsuario(usuario);
-
-        return ResponseEntity.ok()
-                .body(usuarioResponse);
-
-    }
-
-    // Listar Usuario - Get
-    @GetMapping(value = "usuario/listar", produces = "application/json")
-    public ResponseEntity<Object> getUsuario() {
-        UsuariosResponse usuariosResponse = new UsuariosResponse();
-        usuariosResponse.setStatus(200);
-        usuariosResponse.setMessage("Usuarios listados correctamente");
-        usuariosResponse.setUsuario(usuarioService.ListarTodos());
-
-        return ResponseEntity.ok()
-                .body(usuariosResponse);
-    }
-
-    // Actualizar Usuario por Id - Put
-    @PutMapping(value = "usuario/actualizar/{id}", produces = "application/json")
-    public ResponseEntity<Object> setUsuario(@PathVariable long id, @RequestBody Usuario usuarioRequest) {
-        UsuarioResponse usuarioResponse = new UsuarioResponse();
-        Usuario usuario = new Usuario();
-        usuario = usuarioService.buscar(id);
-        usuario.setUsuNombreCompleto(usuarioRequest.getUsuNombreCompleto());
-        usuario.setUsuApodo(usuarioRequest.getUsuApodo());
-        usuario.setUsuCorreo(usuarioRequest.getUsuCorreo());
-        usuarioService.crear(usuario);
-
-        usuarioResponse.setStatus(200);
-        usuarioResponse.setMessage("Usuario actualizado exitosamente");
-        usuarioResponse.setUsuario(usuario);
-        return ResponseEntity.ok()
-                .body(usuario);
-    }
-
-        // Eliminar Usuario por Id - Delete
-        @DeleteMapping(value = "usuario/eliminar/{id}", produces = "application/json")
-        public ResponseEntity<Object> deleteUsuario(@PathVariable long id) {
-            UsuarioResponse usuarioResponse = new UsuarioResponse();
-            usuarioService.eliminar(id);
-            usuarioResponse.setStatus(200);
-            usuarioResponse.setMessage("Usuario eliminado exitosamente");
-            return ResponseEntity.ok()
-                    .body(usuarioResponse);
-    
-        }
 
 }
