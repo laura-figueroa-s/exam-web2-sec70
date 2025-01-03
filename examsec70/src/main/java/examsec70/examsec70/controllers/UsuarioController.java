@@ -174,11 +174,16 @@ public class UsuarioController {
     }
 
     // Actualizar Usuario-Lámina por Id - Put
-    @PutMapping(value = "lamina/actualizar/{id}", produces = "application/json")
+    @PutMapping(value = "lamina/actualizar/{id}", consumes = "application/json", produces = "application/json")
     public ResponseEntity<Object> setLamina(@PathVariable long id, @RequestBody UsuarioLamina usuarioLaminaRequest) {
         UsuarioLaminaResponse usuarioLaminaResponse = new UsuarioLaminaResponse();
         UsuarioLamina usuarioLamina = new UsuarioLamina();
         usuarioLamina = usuarioLaminaService.buscar(id);
+        if (usuarioLamina == null) {
+            usuarioLaminaResponse.setStatus(404);
+            usuarioLaminaResponse.setMessage("Lámina no encontrada");
+            return ResponseEntity.status(404).body(usuarioLaminaResponse);
+        }
         usuarioLamina.setUsuLamLamina(usuarioLaminaRequest.getUsuLamLamina());
         usuarioLamina.setUsuLamUsuario(usuarioLaminaRequest.getUsuLamUsuario());
         usuarioLamina.setCantidad(usuarioLaminaRequest.getCantidad());
