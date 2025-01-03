@@ -168,7 +168,7 @@ public class UsuarioController {
 
     // Listar Usuario-Láminas Faltantes - Get
 
-    @GetMapping(value = "lamina/listar/{id}/faltantes", produces = "application/json")
+    /*@GetMapping(value = "lamina/listar/{id}/faltantes", produces = "application/json")
     public ResponseEntity<Object> getLaminaFaltante(@PathVariable long id) {
         UsuarioLaminasResponse usuarioLaminasResponse = new UsuarioLaminasResponse();
         usuarioLaminasResponse.setStatus(200);
@@ -177,6 +177,12 @@ public class UsuarioController {
 
         return ResponseEntity.ok()
                 .body(usuarioLaminasResponse);
+    }*/
+
+    @GetMapping("/laminas/faltantes/{id}")
+    public ResponseEntity<Object> getLaminasFaltantes(@PathVariable long id) {
+        List<Lamina> faltantes = usuarioLaminaService.buscarLaminasFaltantes(id, 1);
+        return ResponseEntity.ok(faltantes);
     }
 
     // Actualizar Usuario-Lámina por Id - Put

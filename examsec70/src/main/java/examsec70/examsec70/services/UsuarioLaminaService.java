@@ -70,6 +70,10 @@ public class UsuarioLaminaService {
         return usuarioLaminaRepository.findByCantidadLessThanAndUsuLamUsuarioUsuId(cantidad, id);
     } 
 
+    public List<Lamina> buscarLaminasFaltantes(long id, long cantidad) {
+        return usuarioLaminaRepository.findMissingLaminasForUserAlbums(id, cantidad);
+    }
+
     // eliminar
     public void eliminar(long usuLam) {
         usuarioLaminaRepository.deleteById(usuLam);
