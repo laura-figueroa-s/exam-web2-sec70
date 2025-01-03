@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-Examsec70Application<examsec70>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "examsec70.examsec70.Examsec70Application",
+            "projectName": "examsec70",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

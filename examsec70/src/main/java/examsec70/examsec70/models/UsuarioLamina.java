@@ -1,5 +1,7 @@
 package examsec70.examsec70.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,6 +19,7 @@ public class UsuarioLamina {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long usuLamId;
 
+    @JsonManagedReference
     @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
     @JoinColumn(name = "usuId")
     private Usuario usuLamUsuario;

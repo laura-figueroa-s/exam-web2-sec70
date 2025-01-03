@@ -29,10 +29,10 @@ public class Album {
     private String albDescripcion;
     private long cantLaminas; 
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "lamAlbum", cascade = { CascadeType.ALL})
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "lamAlbum", cascade = { CascadeType.ALL})
     @JsonIgnore
     private List<Lamina> albLamina;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuAlbAlbum", cascade = { CascadeType.ALL})
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "usuAlbAlbum", cascade = { CascadeType.ALL})
     @JsonIgnore
     private List<UsuarioAlbum> albUsuarioAlbum;
 
