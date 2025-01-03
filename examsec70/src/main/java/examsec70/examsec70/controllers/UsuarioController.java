@@ -1,5 +1,8 @@
 package examsec70.examsec70.controllers;
 
+import java.util.List;
+
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -11,15 +14,20 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import examsec70.examsec70.models.Album;
+import examsec70.examsec70.models.Lamina;
+import examsec70.examsec70.models.Usuario;
 import examsec70.examsec70.models.UsuarioAlbum;
 import examsec70.examsec70.models.UsuarioLamina;
 import examsec70.examsec70.responses.UsuarioAlbumResponse;
 import examsec70.examsec70.responses.UsuarioAlbumsResponse;
 import examsec70.examsec70.responses.UsuarioLaminaResponse;
 import examsec70.examsec70.responses.UsuarioLaminasResponse;
-
+import examsec70.examsec70.services.AlbumService;
+import examsec70.examsec70.services.LaminaService;
 import examsec70.examsec70.services.UsuarioAlbumService;
 import examsec70.examsec70.services.UsuarioLaminaService;
+import examsec70.examsec70.services.UsuarioService;
 
 @Controller
 @RequestMapping("api/usuario")
@@ -28,6 +36,12 @@ public class UsuarioController {
     private UsuarioAlbumService usuarioAlbumService;
     @Autowired
     private UsuarioLaminaService usuarioLaminaService;
+    @Autowired
+    private AlbumService albumService;
+    @Autowired
+    private UsuarioService usuarioService;
+    @Autowired
+    private LaminaService laminaService;
 
     // Añadir Usuario-Album - Post
     @PostMapping(value = "album/add", produces = "application/json")
@@ -36,6 +50,12 @@ public class UsuarioController {
         if (usuarioAlbum.getUsuAlbAlbum() == null) {
             throw new RuntimeException("Indicar el Id del Álbum es obligatorio");
         }
+
+        Album album = albumService.buscar(usuarioAlbum.getUsuAlbAlbum().getAlbId());
+        if (album == null) {
+            throw new RuntimeException("El álbum con id " + usuarioAlbum.getUsuAlbAlbum().getAlbId() + " no existe");
+        }
+
         usuarioAlbumService.crear(usuarioAlbum);
 
         // Estructura de Respuesta
@@ -46,7 +66,6 @@ public class UsuarioController {
 
         return ResponseEntity.ok()
                 .body(usuarioAlbumResponse);
-
     }
 
     // Listar Usuario-Albumes Propios del Usuario - Get
@@ -94,56 +113,64 @@ public class UsuarioController {
     @PostMapping(value = "lamina/add", produces = "application/json")
     public ResponseEntity<Object> createLamina(@RequestBody UsuarioLamina usuarioLamina) {
 
-        if (usuarioLamina.getUsuLamLamina() == null) {
-            throw new RuntimeException("Indicar el Id de la Lámina es obligatorio");
-        }
-        usuarioLaminaService.crear(usuarioLamina);
-
-        // Estructura de Respuesta
-        UsuarioLaminaResponse usuarioLaminaResponse = new UsuarioLaminaResponse();
-        usuarioLaminaResponse.setStatus(200);
-        usuarioLaminaResponse.setMessage("Lámina añadida correctamente");
-        usuarioLaminaResponse.setUsuarioLamina(usuarioLamina);
-
-        return ResponseEntity.ok()
-                .body(usuarioLaminaResponse);
-
+    if (usuarioLamina.getUsuLamLamina() == null) {
+        throw new RuntimeException("Indicar el Id de la Lámina es obligatorio");
     }
+    if (usuarioLamina.getUsuLamUsuario() == null) {
+        throw new RuntimeException("Indicar el Id del Usuario es obligatorio");
+    }
+    if (usuarioLamina.getCantidad() <= 0) {
+        throw new RuntimeException("La cantidad debe ser un número positivo");
+    }
+
+    // Check if the user and lamina exist
+    Usuario usuario = usuarioService.buscar(usuarioLamina.getUsuLamUsuario().getUsuId());
+    if (usuario == null) {
+        throw new RuntimeException("El usuario no existe");
+    }
+    Lamina lamina = laminaService.buscar(usuarioLamina.getUsuLamLamina().getLamId());
+    if (lamina == null) {
+        throw new RuntimeException("La lámina no existe");
+    }
+
+    usuarioLaminaService.crear(usuarioLamina);
+
+    // Estructura de Respuesta
+    UsuarioLaminaResponse usuarioLaminaResponse = new UsuarioLaminaResponse();
+    usuarioLaminaResponse.setStatus(200);
+    usuarioLaminaResponse.setMessage("Lámina añadida correctamente");
+    usuarioLaminaResponse.setUsuarioLamina(usuarioLamina);
+
+    return ResponseEntity.ok()
+            .body(usuarioLaminaResponse);
+
+}
 
     // Listar Usuario-Láminas Propias del Usuario - Get
     @GetMapping(value = "lamina/listar/{id}", produces = "application/json")
     public ResponseEntity<Object> getLamina(@PathVariable long id) {
-        UsuarioLaminasResponse usuarioLaminasResponse = new UsuarioLaminasResponse();
-        usuarioLaminasResponse.setStatus(200);
-        usuarioLaminasResponse.setMessage("Láminas listadas correctamente");
-        usuarioLaminasResponse.setUsuarioLaminas(usuarioLaminaService.buscarMayorQue(id,0));
+    UsuarioLaminasResponse usuarioLaminasResponse = new UsuarioLaminasResponse();
+    usuarioLaminasResponse.setStatus(200);
+    usuarioLaminasResponse.setMessage("Láminas listadas correctamente");
+    usuarioLaminasResponse.setUsuarioLaminas(usuarioLaminaService.buscarPorUsuarioId(id));
 
-        return ResponseEntity.ok()
-                .body(usuarioLaminasResponse);
-    }
+    return ResponseEntity.ok()
+            .body(usuarioLaminasResponse);
+}
 
     // Listar Usuario-Láminas Repetidas - Get
-    @GetMapping(value = "lamina/listar/{id}/repetidas", produces = "application/json")
-    public ResponseEntity<Object> getLaminaRepetida(@PathVariable long id) {
-        UsuarioLaminasResponse usuarioLaminasResponse = new UsuarioLaminasResponse();
-        usuarioLaminasResponse.setStatus(200);
-        usuarioLaminasResponse.setMessage("Láminas repetidas listadas correctamente");
-        usuarioLaminasResponse.setUsuarioLaminas(usuarioLaminaService.buscarMayorQue(id, 1));
 
-        return ResponseEntity.ok()
-                .body(usuarioLaminasResponse);
+    @GetMapping("/lamina/listar/{id}/repetidas")
+    public ResponseEntity<List<UsuarioLamina>> getLaminasRepetidas(@PathVariable Long id) {
+        List<UsuarioLamina> laminasRepetidas = usuarioLaminaService.buscarLaminasRepetidas(id);
+        return ResponseEntity.ok(laminasRepetidas);
     }
 
     // Listar Usuario-Láminas Faltantes - Get
-    @GetMapping(value = "lamina/listar/{id}/faltantes", produces = "application/json")
-    public ResponseEntity<Object> getLaminaFaltante(@PathVariable long id) {
-        UsuarioLaminasResponse usuarioLaminasResponse = new UsuarioLaminasResponse();
-        usuarioLaminasResponse.setStatus(200);
-        usuarioLaminasResponse.setMessage("Láminas faltantes listadas correctamente");
-        usuarioLaminasResponse.setUsuarioLaminas(usuarioLaminaService.buscarMenorQue(id, 1));
-
-        return ResponseEntity.ok()
-                .body(usuarioLaminasResponse);
+    @GetMapping("/laminas/faltantes/{id}")
+    public ResponseEntity<Object> getLaminasFaltantes(@PathVariable long id) {
+        List<Lamina> faltantes = usuarioLaminaService.buscarLaminasFaltantes(id, 1);
+        return ResponseEntity.ok(faltantes);
     }
 
     // Actualizar Usuario-Lámina por Id - Put

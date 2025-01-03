@@ -22,11 +22,11 @@ public class Lamina {
     private long lamId;
     private long lamNumero;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
     @JoinColumn(name = "albId")
     private Album lamAlbum;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuLamLamina", cascade = { CascadeType.ALL})
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "usuLamLamina", cascade = { CascadeType.ALL})
     @JsonIgnore
     private List<UsuarioLamina> lamUsuLamLamina;
 }
