@@ -2,6 +2,8 @@ package examsec70.examsec70.models;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,8 +24,10 @@ public class Usuario {
     private String usuCorreo;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuAlbUsuario", cascade = { CascadeType.ALL})
+    @JsonIgnore
     private List<UsuarioAlbum> usuAlbum;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuLamUsuario", cascade = { CascadeType.ALL})
+    @JsonIgnore
     private List<UsuarioLamina> usuLamina;
 
 }

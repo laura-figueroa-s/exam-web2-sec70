@@ -17,13 +17,11 @@ public class UsuarioLamina {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long usuLamId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
     @JoinColumn(name = "usuId")
     private Usuario usuLamUsuario;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-    @JoinColumn(name = "albId")
-    private Album usuLamAlbum;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
     @JoinColumn(name = "lamId")
     private Lamina usuLamLamina;
 

@@ -28,6 +28,11 @@ public class UsuarioAlbumService {
     public UsuarioAlbum buscar(long usuAlb) {
         return usuarioAlbumRepository.findById(usuAlb).orElse(null);
     }
+
+    // buscar por usuario
+    public List<UsuarioAlbum> buscarPorUsuario(long usuId) {
+        return usuarioAlbumRepository.findByUsuAlbUsuarioUsuId(usuId);
+    }
     
     // eliminar
     public void eliminar(long usuAlb) {

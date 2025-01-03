@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import examsec70.examsec70.models.UsuarioAlbum;
 import examsec70.examsec70.models.UsuarioLamina;
 import examsec70.examsec70.responses.UsuarioAlbumResponse;
+import examsec70.examsec70.responses.UsuarioAlbumsResponse;
 import examsec70.examsec70.responses.UsuarioLaminaResponse;
 import examsec70.examsec70.responses.UsuarioLaminasResponse;
 
@@ -51,13 +52,13 @@ public class UsuarioController {
     // Listar Usuario-Albumes Propios del Usuario - Get
     @GetMapping(value = "album/listar/{id}", produces = "application/json")
     public ResponseEntity<Object> getAlbum(@PathVariable long id) {
-        UsuarioAlbumResponse usuarioAlbumResponse = new UsuarioAlbumResponse();
-        usuarioAlbumResponse.setStatus(200);
-        usuarioAlbumResponse.setMessage("Álbumes listados correctamente");
-        usuarioAlbumResponse.setUsuarioAlbum(usuarioAlbumService.buscar(id));
+        UsuarioAlbumsResponse usuarioAlbumsResponse = new UsuarioAlbumsResponse();
+        usuarioAlbumsResponse.setStatus(200);
+        usuarioAlbumsResponse.setMessage("Álbumes listados correctamente");
+        usuarioAlbumsResponse.setUsuarioAlbums(usuarioAlbumService.buscarPorUsuario(id));
 
         return ResponseEntity.ok()
-                .body(usuarioAlbumResponse);
+                .body(usuarioAlbumsResponse);
     }
 
     // Actualizar Usuario-Álbum por Id - Put
@@ -101,7 +102,7 @@ public class UsuarioController {
         // Estructura de Respuesta
         UsuarioLaminaResponse usuarioLaminaResponse = new UsuarioLaminaResponse();
         usuarioLaminaResponse.setStatus(200);
-        usuarioLaminaResponse.setMessage("Álbum añadido correctamente");
+        usuarioLaminaResponse.setMessage("Lámina añadida correctamente");
         usuarioLaminaResponse.setUsuarioLamina(usuarioLamina);
 
         return ResponseEntity.ok()
@@ -115,7 +116,7 @@ public class UsuarioController {
         UsuarioLaminasResponse usuarioLaminasResponse = new UsuarioLaminasResponse();
         usuarioLaminasResponse.setStatus(200);
         usuarioLaminasResponse.setMessage("Láminas listadas correctamente");
-        usuarioLaminasResponse.setUsuarioLaminas(usuarioLaminaService.buscarMayordeCero(id));
+        usuarioLaminasResponse.setUsuarioLaminas(usuarioLaminaService.buscarMayorQue(id,0));
 
         return ResponseEntity.ok()
                 .body(usuarioLaminasResponse);
@@ -127,7 +128,7 @@ public class UsuarioController {
         UsuarioLaminasResponse usuarioLaminasResponse = new UsuarioLaminasResponse();
         usuarioLaminasResponse.setStatus(200);
         usuarioLaminasResponse.setMessage("Láminas repetidas listadas correctamente");
-        usuarioLaminasResponse.setUsuarioLaminas(usuarioLaminaService.buscarRepetidos(id));
+        usuarioLaminasResponse.setUsuarioLaminas(usuarioLaminaService.buscarMayorQue(id, 1));
 
         return ResponseEntity.ok()
                 .body(usuarioLaminasResponse);
@@ -139,7 +140,7 @@ public class UsuarioController {
         UsuarioLaminasResponse usuarioLaminasResponse = new UsuarioLaminasResponse();
         usuarioLaminasResponse.setStatus(200);
         usuarioLaminasResponse.setMessage("Láminas faltantes listadas correctamente");
-        usuarioLaminasResponse.setUsuarioLaminas(usuarioLaminaService.buscarFaltantes(id));
+        usuarioLaminasResponse.setUsuarioLaminas(usuarioLaminaService.buscarMenorQue(id, 1));
 
         return ResponseEntity.ok()
                 .body(usuarioLaminasResponse);
@@ -151,8 +152,6 @@ public class UsuarioController {
         UsuarioLaminaResponse usuarioLaminaResponse = new UsuarioLaminaResponse();
         UsuarioLamina usuarioLamina = new UsuarioLamina();
         usuarioLamina = usuarioLaminaService.buscar(id);
-        usuarioLamina.setUsuLamId(usuarioLaminaRequest.getUsuLamId());
-        usuarioLamina.setUsuLamAlbum(usuarioLaminaRequest.getUsuLamAlbum());
         usuarioLamina.setUsuLamLamina(usuarioLaminaRequest.getUsuLamLamina());
         usuarioLamina.setUsuLamUsuario(usuarioLaminaRequest.getUsuLamUsuario());
         usuarioLamina.setCantidad(usuarioLaminaRequest.getCantidad());

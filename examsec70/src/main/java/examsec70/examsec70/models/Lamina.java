@@ -22,7 +22,7 @@ public class Lamina {
     private long lamId;
     private long lamNumero;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
     @JoinColumn(name = "albId")
     private Album lamAlbum;
 

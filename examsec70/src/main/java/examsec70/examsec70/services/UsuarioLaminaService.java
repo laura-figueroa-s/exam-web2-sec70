@@ -28,19 +28,14 @@ public class UsuarioLaminaService {
         return usuarioLaminaRepository.findById(id).orElse(null);
     }
 
-    // buscar si se siente alguna lamina
-    public List<UsuarioLamina> buscarMayordeCero(long id) {
-        return usuarioLaminaRepository.findByCantidadGreaterThanAndUsuLamId(0,id);
-    }
-
-    // buscar repetidos por usuario
-    public List<UsuarioLamina> buscarRepetidos(long id) {
-        return usuarioLaminaRepository.findByCantidadGreaterThanAndUsuLamId(1, id);
+    // buscar si es mayor que un numero
+    public List<UsuarioLamina> buscarMayorQue(long id, long cantidad) {
+        return usuarioLaminaRepository.findByCantidadGreaterThanAndUsuLamUsuarioUsuId(id, cantidad);
     }
 
     // buscar faltantes por usuario
-    public List<UsuarioLamina> buscarFaltantes(long id) {
-        return usuarioLaminaRepository.findByCantidadLessThanAndUsuLamId(1, id);
+    public List<UsuarioLamina> buscarMenorQue(long id, long cantidad) {
+        return usuarioLaminaRepository.findByCantidadLessThanAndUsuLamUsuarioUsuId(cantidad, id);
     }
 
     // eliminar

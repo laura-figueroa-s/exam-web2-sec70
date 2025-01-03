@@ -16,11 +16,11 @@ public class UsuarioAlbum {
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private long usuAlbId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
     @JoinColumn(name = "albId")
     private Album usuAlbAlbum;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToOne(fetch = FetchType.EAGER, cascade = { CascadeType.MERGE })
     @JoinColumn(name = "usuId")
     private Usuario usuAlbUsuario;
 

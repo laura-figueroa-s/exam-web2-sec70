@@ -35,13 +35,11 @@ public class Album {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuAlbAlbum", cascade = { CascadeType.ALL})
     @JsonIgnore
     private List<UsuarioAlbum> albUsuarioAlbum;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuLamAlbum", cascade = { CascadeType.ALL})
-    @JsonIgnore
-    private List<UsuarioLamina> albUsuarioLamina;
+
 
     @CreatedDate
-    private LocalDate fecha_crea;
+    private LocalDate fechaCrea;
     @LastModifiedDate
-    private LocalDate fecha_modi;
+    private LocalDate fechaModi;
 
 }
