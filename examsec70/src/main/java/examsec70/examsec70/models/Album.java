@@ -6,6 +6,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -28,10 +30,13 @@ public class Album {
     private long cantLaminas; 
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "lamAlbum", cascade = { CascadeType.ALL})
+    @JsonIgnore
     private List<Lamina> albLamina;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuAlbAlbum", cascade = { CascadeType.ALL})
+    @JsonIgnore
     private List<UsuarioAlbum> albUsuarioAlbum;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuLamAlbum", cascade = { CascadeType.ALL})
+    @JsonIgnore
     private List<UsuarioLamina> albUsuarioLamina;
 
     @CreatedDate

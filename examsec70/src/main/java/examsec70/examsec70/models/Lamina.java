@@ -1,6 +1,8 @@
 package examsec70.examsec70.models;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,6 +25,8 @@ public class Lamina {
     @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinColumn(name = "albId")
     private Album lamAlbum;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "usuLamLamina", cascade = { CascadeType.ALL})
+    @JsonIgnore
     private List<UsuarioLamina> lamUsuLamLamina;
 }

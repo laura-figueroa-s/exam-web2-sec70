@@ -27,5 +27,5 @@ public class UsuarioLamina {
     @JoinColumn(name = "lamId")
     private Lamina usuLamLamina;
 
-    private long cantidad;
+    private int cantidad;
 }
