@@ -1,14 +1,11 @@
 package examsec70.examsec70.services;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import examsec70.examsec70.models.Album;
 import examsec70.examsec70.models.Lamina;
 import examsec70.examsec70.models.UsuarioLamina;
 import examsec70.examsec70.repositories.AlbumRepository;
@@ -57,26 +54,26 @@ public class UsuarioLaminaService {
     }
 
     // buscar si es mayor que un numero
-    public List<UsuarioLamina> buscarMayorQue(long id, long cantidad) {
-        return usuarioLaminaRepository.findByCantidadGreaterThanAndUsuLamUsuarioUsuId(id, cantidad);
-    }
-
     public List<UsuarioLamina> buscarLaminasRepetidas(Long userId) {
         return usuarioLaminaRepository.findByUsuLamUsuarioUsuIdAndCantidadGreaterThan(userId, 1);
     }
 
-    // buscar faltantes por usuario
-    public List<UsuarioLamina> buscarMenorQue(long id, long cantidad) {
-        return usuarioLaminaRepository.findByCantidadLessThanAndUsuLamUsuarioUsuId(cantidad, id);
-    } 
+    /* public List<UsuarioLamina> buscarMayorQue(long id, long cantidad) {
+        return usuarioLaminaRepository.findByCantidadGreaterThanAndUsuLamUsuarioUsuId(id, cantidad);
+    } */
 
+
+    // buscar faltantes por usuario
     public List<Lamina> buscarLaminasFaltantes(long id, long cantidad) {
         return usuarioLaminaRepository.findMissingLaminasForUserAlbums(id, cantidad);
     }
+
+    /* public List<UsuarioLamina> buscarMenorQue(long id, long cantidad) {
+        return usuarioLaminaRepository.findByCantidadLessThanAndUsuLamUsuarioUsuId(cantidad, id);
+    }  */
 
     // eliminar
     public void eliminar(long usuLam) {
         usuarioLaminaRepository.deleteById(usuLam);
     }
-
 }

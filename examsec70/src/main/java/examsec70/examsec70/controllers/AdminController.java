@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import examsec70.examsec70.models.Album;
 import examsec70.examsec70.models.Lamina;
+import examsec70.examsec70.models.Usuario;
 import examsec70.examsec70.responses.AlbumResponse;
 import examsec70.examsec70.responses.AlbumsResponse;
 import examsec70.examsec70.responses.LaminaResponse;
@@ -20,6 +21,7 @@ import examsec70.examsec70.responses.LaminasResponse;
 
 import examsec70.examsec70.services.AlbumService;
 import examsec70.examsec70.services.LaminaService;
+import examsec70.examsec70.services.UsuarioService;
 
 @Controller
 @RequestMapping("api/admin")
@@ -28,6 +30,8 @@ public class AdminController {
     AlbumService albumService;
     @Autowired
     LaminaService laminaService;
+    @Autowired
+    UsuarioService usuarioService;
 
     // Crear Álbum - Post
     @PostMapping(value = "album/crear", produces = "application/json")
@@ -46,7 +50,6 @@ public class AdminController {
 
         return ResponseEntity.ok()
                 .body(albumResponse);
-
     }
 
     // Listar Álbums - Get
@@ -148,7 +151,12 @@ public class AdminController {
         laminaResponse.setMessage("Lámina eliminada exitosamente");
         return ResponseEntity.ok()
                 .body(laminaResponse);
-
     }
 
+    //Crear usuario
+    @PostMapping("/crear-usuario")
+    public ResponseEntity<Usuario> createUser(@RequestBody Usuario usuario) {
+    Usuario createdUser = usuarioService.crear(usuario);
+    return ResponseEntity.ok(createdUser);
+}
 }
