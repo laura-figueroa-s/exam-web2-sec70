@@ -26,6 +26,4 @@ public interface UsuarioLaminaRepository extends JpaRepository<UsuarioLamina, Lo
        "WHERE ua.usuAlbUsuario.usuId = :userId " +
        "AND (ul.cantidad < :cantidad OR ul IS NULL)")
   List<Lamina> findMissingLaminasForUserAlbums(@Param("userId") long userId, @Param("cantidad") long cantidad);
-
 }
-
